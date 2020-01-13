@@ -64,7 +64,7 @@ public:
 	{
 		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 		SetConsoleTextAttribute(hOut, color);
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { x * 2, y });
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { y * 2, x });
 		std::cout << str;
 	}
 };
