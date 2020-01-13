@@ -26,4 +26,5 @@ int main()
 	mode.Tick();
 
 	system("pause");
+
 }
