@@ -6,5 +6,7 @@
   <ItemGroup>
     <ClInclude Include="tools.hpp" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="GameMode.hpp" />
+    <ClInclude Include="Map.hpp" />
   </ItemGroup>
 </Project>

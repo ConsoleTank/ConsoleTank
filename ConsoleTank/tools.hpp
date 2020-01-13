@@ -1,3 +1,6 @@
+#ifndef __TOOLS_HPP__
+#define __TOOLS_HPP__
+
 #include <iostream>
 #include <Windows.h>
 #include <string>
@@ -68,3 +71,5 @@ public:
 		std::cout << str;
 	}
 };
+
+#endif // __TOOLS_HPP__
