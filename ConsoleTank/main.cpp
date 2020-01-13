@@ -1,10 +1,21 @@
 #include <iostream>
 
+#include "tools.hpp"
+
 class GameMode
 {
 public:
 	bool Init()
 	{
+
+		tools::ShowCursor(false);
+
+		tools::SetWindowSize(120, 40);
+
+		tools::SetTitle(TEXT("坦克大战"));
+
+		tools::DrawString(TEXT("测试中文English"), 10, 10);
+
 		return true;
 	}
 
