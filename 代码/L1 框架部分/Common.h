@@ -16,11 +16,6 @@ public:
 	const static int WATER = 3; // ∷
 	const static int STONE = 4; // ★
 
-	const static int MODE_SINGLE = 0; // 单人模式
-	const static int MODE_DOUBLE = 1; // 双人模式
-	const static int MODE_EDITOR = 2; // 编辑模式
-	const static int MODE_EXIT = 3; // 退出游戏
-
 };
 
 #endif // __COMMON_HPP__

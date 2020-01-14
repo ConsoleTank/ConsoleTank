@@ -4,21 +4,10 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
-#include <functional>
 
 class tools
 {
 public:
-
-	typedef void(*ClickCallback)(short, short);
-
-	static bool SetMode()
-	{
-		HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
-		DWORD fdwMode = ENABLE_EXTENDED_FLAGS | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT;
-		return SetConsoleMode(hStdin, fdwMode);
-	}
-
 	static void ShowCursor(bool isShow)
 	{
 		CONSOLE_CURSOR_INFO stcCursorInfo;
@@ -80,38 +69,6 @@ public:
 		SetConsoleTextAttribute(hOut, color);
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { y * 2, x });
 		std::cout << str;
-	}
-
-	static void ProcessMouseClick(ClickCallback callback)
-	{
-		HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
-
-		INPUT_RECORD	mouseRec;
-		DWORD			res;
-
-		while (ReadConsoleInput(hIn, &mouseRec, 1, &res))
-		{
-			if (mouseRec.EventType == MOUSE_EVENT)
-			{
-				short nX = mouseRec.Event.MouseEvent.dwMousePosition.X / 2;
-				short nY = mouseRec.Event.MouseEvent.dwMousePosition.Y;
-
-				switch (mouseRec.Event.MouseEvent.dwEventFlags)
-				{
-				case 0:
-					//×ó¼üµ¥»÷
-					if (mouseRec.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
-					{
-						callback(nX, nY);
-					}
-				case MOUSE_MOVED:
-					nX = mouseRec.Event.MouseEvent.dwMousePosition.X;
-					nY = mouseRec.Event.MouseEvent.dwMousePosition.Y;
-					break;
-				}
-			}
-		}
-
 	}
 };
 

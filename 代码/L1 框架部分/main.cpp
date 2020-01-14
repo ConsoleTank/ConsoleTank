@@ -11,4 +11,6 @@ int main()
 	}
 	
 	mode.Tick();
+
+
 }
