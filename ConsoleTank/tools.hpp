@@ -26,6 +26,8 @@ public:
 	static void SetTitle(const std::string& title)
 	{
 		SetConsoleTitle(title.c_str());
+
+
 	}
 
 	static bool SetWindowSize(short width, short height)

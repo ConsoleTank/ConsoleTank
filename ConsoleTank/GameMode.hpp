@@ -9,6 +9,14 @@
 class GameMode
 {
 public:
+	void welcome() 
+	{
+		
+		m_pmap->load_map("welcome.txt");
+		m_pmap->draw();
+		Sleep(1500);
+
+	}
 	bool Init()
 	{
 		tools::SetMode();
@@ -18,18 +26,24 @@ public:
 		tools::SetWindowSize(120, 40);
 
 		tools::SetTitle(TEXT("Ì¹¿Ë´óÕ½"));
-
 		m_pmap = new Map();
-
+		
+		welcome();
 		m_pmap->load_map("map.txt");
 		m_pmap->draw();
 
 		return true;
 	}
 
+	bool finish() {
+		delete m_pmap;
+		m_pmap = NULL;
+		return true;
+	}
+
 	void Tick()
 	{
-		while (true)
+		while (running)
 		{
 			HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
 
@@ -200,7 +214,7 @@ public:
 				break;
 			case 3:
 				if_in_game = false;
-				exit(0);
+				running = false;
 				break;
 			}
 			break;
@@ -236,6 +250,7 @@ public:
 	int cur_sel = 0;
 	bool if_in_game = false;
 	int draw_type = Common::WALL;
+	bool running = true;
 };
 
 #endif // __GAMEMODE_HPP__

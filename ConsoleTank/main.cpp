@@ -12,5 +12,5 @@ int main()
 
 	mode.Tick();
 
-
+	mode.finish();
 }
