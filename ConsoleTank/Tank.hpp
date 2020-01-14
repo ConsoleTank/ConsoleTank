@@ -11,6 +11,7 @@ public:
 		}
 	}
 	void move(INPUT_RECORD rec) {
+
 		switch (rec.Event.KeyEvent.uChar.AsciiChar)
 		{
 		case 'w':

@@ -11,9 +11,9 @@
 class GameMode
 {
 public:
-	void welcome() 
+	void welcome()
 	{
-		
+
 		m_pmap->load_map("welcome.txt");
 		m_pmap->draw();
 		Sleep(1500);
@@ -29,7 +29,7 @@ public:
 
 		tools::SetTitle(TEXT("Ì¹¿Ë´óÕ½"));
 		m_pmap = new Map();
-		
+
 		welcome();
 		m_pmap->load_map("map.txt");
 		m_pmap->draw();
@@ -40,6 +40,10 @@ public:
 	bool finish() {
 		delete m_pmap;
 		m_pmap = NULL;
+
+		delete tank01;
+		tank01 = NULL;
+
 		return true;
 	}
 
@@ -73,13 +77,14 @@ public:
 				}
 			}
 			else {
-				if(cur_sel==2)
+				if (cur_sel == 2)
+				{
 					Mode_editor_paint_info();
 
-				for (int i = 0; i <= 3; i++)
-				{
-
-					tools::DrawString("                ", i + 33, 15);
+					for (int i = 0; i <= 3; i++)
+					{
+						tools::DrawString("                ", i + 33, 15);
+					}
 				}
 			}
 		}
@@ -127,10 +132,14 @@ public:
 
 	void single_player() {
 		m_pmap->load_map("battle.txt");
-		tank01 = new Tank;
+		m_pmap->draw();
+
+		if(!tank01)
+			tank01 = new Tank();
+
 		tank01->pos_x = 20;
 		tank01->pos_y = 20;
-		m_pmap->draw();
+
 		tank01->draw_tank();
 	}
 
