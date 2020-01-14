@@ -5,6 +5,8 @@
 
 #include "tools.hpp"
 #include "Map.hpp"
+#include "Tank.hpp"
+
 
 class GameMode
 {
@@ -71,8 +73,8 @@ public:
 				}
 			}
 			else {
-
-				Mode_editor_paint_info();
+				if(cur_sel==2)
+					Mode_editor_paint_info();
 
 				for (int i = 0; i <= 3; i++)
 				{
@@ -123,8 +125,23 @@ public:
 
 	}
 
+	void single_player() {
+		m_pmap->load_map("battle.txt");
+		tank01 = new Tank;
+		tank01->pos_x = 20;
+		tank01->pos_y = 20;
+		m_pmap->draw();
+		tank01->draw_tank();
+	}
+
 	void OnMouse(INPUT_RECORD mouseRec)
 	{
+		if (!if_in_game)
+			return;
+
+		if (cur_sel != 2)
+			return;
+
 		short nX = mouseRec.Event.MouseEvent.dwMousePosition.X / 2;
 		short nY = mouseRec.Event.MouseEvent.dwMousePosition.Y;
 
@@ -147,30 +164,38 @@ public:
 
 	void OnKeyBoard_inGame(INPUT_RECORD mouseRec)
 	{
-		switch (mouseRec.Event.KeyEvent.uChar.AsciiChar)
+		if (cur_sel == 0)
 		{
-		case '1':
-			draw_type = Common::WALL;
-			break;
+			tank01->move(mouseRec);
+		}
+		if (cur_sel == 2)
+		{
 
-		case '2':
-			draw_type = Common::GRASS;
-			break;
+			switch (mouseRec.Event.KeyEvent.uChar.AsciiChar)
+			{
+			case '1':
+				draw_type = Common::WALL;
+				break;
 
-		case '3':
-			draw_type = Common::WATER;
-			break;
+			case '2':
+				draw_type = Common::GRASS;
+				break;
 
-		case '4':
-			draw_type = Common::STONE;
-			break;
+			case '3':
+				draw_type = Common::WATER;
+				break;
 
-		case 's':
-		case 'S':
-			m_pmap->save_map("editor.txt");
-			if_in_game = false;
-			m_pmap->load_map("map.txt");
-			m_pmap->draw();
+			case '4':
+				draw_type = Common::STONE;
+				break;
+
+			case 's':
+			case 'S':
+				m_pmap->save_map("editor.txt");
+				if_in_game = false;
+				m_pmap->load_map("map.txt");
+				m_pmap->draw();
+			}
 		}
 	}
 
@@ -201,7 +226,9 @@ public:
 			switch (cur_sel)
 			{
 			case 0:
+
 				if_in_game = true;
+				single_player();
 				break;
 			case 1:
 				if_in_game = true;
@@ -251,6 +278,7 @@ public:
 	bool if_in_game = false;
 	int draw_type = Common::WALL;
 	bool running = true;
+	Tank *tank01;
 };
 
 #endif // __GAMEMODE_HPP__

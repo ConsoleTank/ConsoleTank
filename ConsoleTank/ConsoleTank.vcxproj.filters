@@ -8,5 +8,6 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="GameMode.hpp" />
     <ClInclude Include="Map.hpp" />
+    <ClInclude Include="Tank.hpp" />
   </ItemGroup>
 </Project>
