@@ -7,7 +7,7 @@
 #include <vector>
 using namespace std;
 
-class Common {
+class Common{
 public:
 	const static int LEN = 40;
 	const static int WALK = 0; // ¡õ

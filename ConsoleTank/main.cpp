@@ -9,6 +9,8 @@ int main()
 		std::cout << "³õÊ¼»¯Ê§°Ü" << std::endl;
 		return -1;
 	}
-	
+
 	mode.Tick();
+
+
 }

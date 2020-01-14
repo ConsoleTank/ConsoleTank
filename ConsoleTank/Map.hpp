@@ -25,7 +25,7 @@ public:
 		ofstream fout(text_name);
 		for (int i = 0; i < Common::LEN*Common::LEN; i++)
 		{
-			fout << map[i] << " ";
+			fout << map[i] << ' ';
 			if (i % Common::LEN == Common::LEN - 1)
 			{
 				fout << endl;
