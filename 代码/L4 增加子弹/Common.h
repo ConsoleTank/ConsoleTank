@@ -5,9 +5,20 @@
 #include <conio.h>
 #include <string>
 #include <vector>
+#include <list>
+#include <time.h>
+
 using namespace std;
 
-class Common{
+enum ETankDir
+{
+	E_DIR_T = 0,
+	E_DIR_B,
+	E_DIR_R,
+	E_DIR_L,
+};
+
+class Common {
 public:
 	const static int LEN = 40;
 	const static int WALK = 0; // ¡õ
