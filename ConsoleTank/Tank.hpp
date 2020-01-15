@@ -34,6 +34,8 @@ public:
 		{
 			for (int j = 0; j < 3; j++)
 			{
+				if (GameMode::instance().m_pmap->map[(i + pos_x)*Common::LEN + pos_y + j] == Common::GRASS)
+					continue;
 				GameMode::instance().m_pmap->map[(i + pos_x)*Common::LEN + pos_y + j] = tank_map[(int)m_dir][i * 3 + j];
 			}
 		}
@@ -47,6 +49,8 @@ public:
 		{
 			for (int j = 0; j < 3; j++)
 			{
+				if (GameMode::instance().m_pmap->map[(i + pos_x)*Common::LEN + pos_y + j] == Common::GRASS)
+					continue;
 				GameMode::instance().m_pmap->map[(i + pos_x) * Common::LEN + pos_y + j] = Common::WALK;
 			}
 		}
@@ -124,14 +128,24 @@ public:
 	void Move(ETankDir dir)
 	{
 		clear();
-
+		
 		m_dir = dir;
 
+		bool judge = true;
 		switch (dir)
 		{
 		case E_DIR_T:
 		{
-			if (pos_x == 1)
+			for (int i = 0; i < 3; i++)
+			{
+				int judge_op = GameMode::instance().m_pmap->map[(pos_x - 1)* Common::LEN + pos_y + i];
+				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER)
+				{
+					judge = false;
+					break;
+				}
+			}
+			if (!judge)
 				break;
 			else
 				pos_x--;
@@ -139,7 +153,16 @@ public:
 		}
 		case E_DIR_B:
 		{
-			if (pos_x == 36)
+			for (int i = 0; i < 3; i++)
+			{
+				int judge_op = GameMode::instance().m_pmap->map[(pos_x + 3)* Common::LEN + pos_y + i];
+				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER)
+				{
+					judge = false;
+					break;
+				}
+			}
+			if (!judge)
 				break;
 			else
 				pos_x++;
@@ -147,7 +170,16 @@ public:
 		}
 		case E_DIR_L:
 		{
-			if (pos_y == 1)
+			for (int i = 0; i < 3; i++)
+			{
+				int judge_op = GameMode::instance().m_pmap->map[(pos_x + i )* Common::LEN + pos_y - 1];
+				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER)
+				{
+					judge = false;
+					break;
+				}
+			}
+			if (!judge)
 				break;
 			else
 				pos_y--;
@@ -155,7 +187,16 @@ public:
 		}
 		case E_DIR_R:
 		{
-			if (pos_y == 36)
+			for (int i = 0; i < 3; i++)
+			{
+				int judge_op = GameMode::instance().m_pmap->map[(pos_x + i)* Common::LEN + pos_y + 3];
+				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER)
+				{
+					judge = false;
+					break;
+				}
+			}
+			if (!judge)
 				break;
 			else
 				pos_y++;
