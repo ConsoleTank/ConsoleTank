@@ -1,16 +1,15 @@
 
-#include "GameMode.hpp"
+#include "GameMode.h"
 
 int main()
 {
-	GameMode mode;
-	if (!mode.Init())
+	if (!GameMode::instance().Init())
 	{
 		std::cout << "³õÊ¼»¯Ê§°Ü" << std::endl;
 		return -1;
 	}
 
-	mode.Tick();
+	GameMode::instance().Tick();
 
-	mode.finish();
+	GameMode::instance().finish();
 }

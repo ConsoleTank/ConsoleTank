@@ -1,8 +1,10 @@
 #pragma once
 #include "Common.h"
 #include "tools.hpp"
-#include"bullet.hpp"
+#include"bullet.h"
+#include "GameMode.h"
 
+class GameMode;
 
 class Tank {
 public:
@@ -28,31 +30,11 @@ public:
 
 
 	void fire() {
-		bullet *bul = new bullet;
+		bullet *bul = new bullet(this);
 		my_bul[bul_num] = bul;
 		bul_num++;
-		switch (m_dir)
-		{
-		case E_DIR_T:
-			bul->bul_x = pos_x - 1;
-			bul->bul_y = pos_y + 1;
-			break;
-		case E_DIR_B:
-			bul->bul_x = pos_x + 3;
-			bul->bul_y = pos_y + 1;
-			break;
-		case E_DIR_R:
-			bul->bul_x = pos_x + 1;
-			bul->bul_y = pos_y + 3;
-			break;
-		case E_DIR_L:
-			bul->bul_x = pos_x + 1;
-			bul->bul_y = pos_y - 1;
-			break;
-		}
-		bul->b_dir = m_dir;
-		bul->begin_t = clock();
 
+		bul->fire();
 	}
 
 	void tank_tick() {
@@ -62,13 +44,23 @@ public:
 		}
 	}
 
-	void move(char ch)
+	void ProcessKeyBoard(char ch)
 	{
-
 		clear();
 
 		switch (ch)
 		{
+
+		case 'j':
+		case 'J':
+			fire();
+			break;
+
+		case 'q':
+		case 'Q':
+			GameMode::instance().ReturnToMainMenu();
+			break;
+
 		case 'w':
 		case 'W':
 		{

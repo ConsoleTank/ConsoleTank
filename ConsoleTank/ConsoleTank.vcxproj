@@ -19,15 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
-    <ClInclude Include="GameMode.hpp" />
+    <ClInclude Include="GameMode.h" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Tank.hpp" />
     <ClInclude Include="tools.hpp" />
-    <ClInclude Include="bullet.hpp" />
+    <ClInclude Include="bullet.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

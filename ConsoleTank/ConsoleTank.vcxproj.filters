@@ -2,13 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="GameMode.cpp" />
+    <ClCompile Include="bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tools.hpp" />
     <ClInclude Include="Common.h" />
-    <ClInclude Include="GameMode.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Tank.hpp" />
-    <ClInclude Include="bullet.hpp" />
+    <ClInclude Include="GameMode.h" />
+    <ClInclude Include="bullet.h" />
   </ItemGroup>
 </Project>
