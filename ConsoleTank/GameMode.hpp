@@ -173,6 +173,9 @@ public:
 
 	void OnKeyBoard_inGame(INPUT_RECORD mouseRec)
 	{
+		if (!if_in_game)
+			return;
+
 		if (cur_sel == 0)
 		{
 			tank01->move(mouseRec);

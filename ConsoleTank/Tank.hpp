@@ -4,10 +4,19 @@
 class Tank {
 public:
 	void draw_tank() {
-		string str[3] = { "  ¡ö  ","¡ö¡ö¡ö","¡ö  ¡ö" };
+		
 		for (int i = 0; i <= 2; i++)
 		{
-			tools::DrawString(str[i], pos_x + i, pos_y);
+			tools::DrawString(out_look[now_way][i], pos_x + i, pos_y);
+		}
+	}
+	void clear() {
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				tools::DrawString("  ", pos_x + i, pos_y + j);
+			}
 		}
 	}
 	void move(INPUT_RECORD rec) {
@@ -21,8 +30,8 @@ public:
 				break;
 			else
 			{
+				clear();
 				pos_x--;
-				tools::DrawString("      ", pos_x + 3, pos_y);
 			}
 			break;
 		}
@@ -33,8 +42,9 @@ public:
 				break;
 			else 
 			{
+				clear();
 				pos_x++;
-				tools::DrawString("      ", pos_x - 1, pos_y);
+				
 			}
 			break;
 		}
@@ -45,11 +55,9 @@ public:
 				break;
 			else
 			{
+				clear();
 				pos_y--;
-				for (int i = 0;i<= 2;i++)
-				{
-					tools::DrawString("  ", pos_x + i , pos_y + 3);
-				}
+				
 			}
 			break;
 		}
@@ -62,19 +70,30 @@ public:
 				break;
 			else 
 			{
+				clear();
 				pos_y++;
-				for (int i = 0; i <= 2; i++)
-				{
-					tools::DrawString("  ", pos_x + i, pos_y - 1);
-				}
+				
 			}
 			break;
 		}
-
+		case '1':
+			now_way = 0;
+			break;
+		case'2':
+			now_way = 1;
+			break;
+		case'3':
+			now_way = 2;
+			break;
+		case'4':
+			now_way = 3; 
+			break;
 		}
 		draw_tank();
 	}
 public:
 	int pos_x;
 	int pos_y;
+	string out_look[4][3] = { "  ¡ö  ","¡ö¡ö¡ö","¡ö  ¡ö" ,"¡ö  ¡ö","¡ö¡ö¡ö" ,"  ¡ö  " ,"¡ö¡ö  ","  ¡ö¡ö","¡ö¡ö  ","  ¡ö¡ö","¡ö¡ö  ","  ¡ö¡ö" };
+	int now_way = 0;
 };
