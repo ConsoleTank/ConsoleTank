@@ -1,25 +1,27 @@
 #pragma once
 
 #include "Common.h"
+#include <time.h>
 
 class Tank;
 
-class Bullet
-{
+class bullet {
 public:
-	Bullet(Tank* owner);
-	void Draw();
-	void Clear();
-	void Tick();
-	void Fly();
+	bullet(Tank* owner);
+
+	void draw();
+	void clear();
+	void fire();
+	void tick();
+	void fly();
 
 public:
-	float m_fSpeed;
-	Tank* m_owner = NULL;
-	ETankDir m_dir;
+	int bul_x;
+	int bul_y;
+	ETankDir b_dir;
+	int pace = 1;
+	clock_t begin_t;
+	clock_t end_t;
 
-	int pos_x;
-	int pos_y;
-
-	clock_t m_curClock;
+	Tank* m_owner;
 };

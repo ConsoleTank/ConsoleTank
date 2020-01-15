@@ -8,6 +8,17 @@ class GameMode;
 
 class Tank {
 public:
+	~Tank()
+	{
+		for (int i = 0; i < bul_num; ++i)
+		{
+			delete my_bul[i];
+			my_bul[i] = NULL;
+		}
+
+		bul_num = 0;
+	}
+
 	void draw_tank() {
 		static string out_look[4][3] = { "  ¡ö  ","¡ö¡ö¡ö","¡ö  ¡ö" ,"¡ö  ¡ö","¡ö¡ö¡ö" ,"  ¡ö  " ,"¡ö¡ö  ","  ¡ö¡ö","¡ö¡ö  ","  ¡ö¡ö","¡ö¡ö  ","  ¡ö¡ö" };
 
@@ -44,10 +55,53 @@ public:
 		}
 	}
 
-	void ProcessKeyBoard(char ch)
+	void Move(ETankDir dir)
 	{
 		clear();
 
+		m_dir = dir;
+
+		switch (dir)
+		{
+		case E_DIR_T:
+		{
+			if (pos_x == 1)
+				break;
+			else
+				pos_x--;
+			break;
+		}
+		case E_DIR_B:
+		{
+			if (pos_x == 36)
+				break;
+			else
+				pos_x++;
+			break;
+		}
+		case E_DIR_L:
+		{
+			if (pos_y == 1)
+				break;
+			else
+				pos_y--;
+			break;
+		}
+		case E_DIR_R:
+		{
+			if (pos_y == 36)
+				break;
+			else
+				pos_y++;
+			break;
+		}
+		}
+
+		draw_tank();
+	}
+
+	void ProcessKeyBoard(char ch)
+	{
 		switch (ch)
 		{
 
@@ -58,41 +112,25 @@ public:
 
 		case 'q':
 		case 'Q':
-			GameMode::instance().ReturnToMainMenu();
+			Exit();
 			break;
 
 		case 'w':
 		case 'W':
 		{
-			m_dir = E_DIR_T;
-
-			if (pos_x == 1)
-				break;
-			else
-				pos_x--;
+			Move(E_DIR_T);
 			break;
 		}
 		case's':
 		case'S':
 		{
-			m_dir = E_DIR_B;
-
-			if (pos_x == 36)
-				break;
-			else 
-				pos_x++;
+			Move(E_DIR_B);
 			break;
 		}
 		case'a':
 		case'A':
 		{
-
-			m_dir = E_DIR_L;
-
-			if (pos_y == 1)
-				break;
-			else
-				pos_y--;
+			Move(E_DIR_L);
 			break;
 		}
 
@@ -100,18 +138,20 @@ public:
 		case'd':
 		case'D':
 		{
-
-			m_dir = E_DIR_R;
-
-			if (pos_y == 36)
-				break;
-			else 
-				pos_y++;
+			Move(E_DIR_R);
 			break;
 		}
 		}
+	}
 
-		draw_tank();
+	void Exit()
+	{
+		for (int i = 0; i < bul_num; ++i)
+		{
+			my_bul[i]->clear();
+		}
+
+		GameMode::instance().ReturnToMainMenu();
 	}
 
 public:

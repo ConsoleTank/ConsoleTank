@@ -1,83 +1,75 @@
-#include "Bullet.h"
+#include "bullet.h"
+
 #include "Tank.hpp"
 
-Bullet::Bullet(Tank* owner) : m_fSpeed(0.5f), m_owner(owner)
+bullet::bullet(Tank* owner)
 {
-
+	m_owner = owner;
 }
 
-void Bullet::Clear()
-{
-	tools::DrawString(TEXT("  "), pos_x, pos_y);
+void bullet::draw() {
+	tools::DrawString("¡ñ", bul_x, bul_y);
 }
 
-void Bullet::Draw()
-{
-	tools::DrawString(TEXT("¡ñ"), pos_x, pos_y);
+void bullet::clear() {
+	tools::DrawString("  ", bul_x, bul_y);
 }
 
-void Bullet::Tick()
+void bullet::fire()
 {
-	if (m_curClock <= 0)
-		return;
+	b_dir = m_owner->m_dir;
 
-	clock_t c = clock();
-	float dTime = (float)(c - m_curClock) / CLOCKS_PER_SEC;
-	if (dTime > m_fSpeed)
-	{
-		m_curClock = c;
-
-		Clear();
-
-		switch (m_dir)
-		{
-		case E_DIR_T:
-			pos_x--;
-			break;
-		case E_DIR_B:
-			pos_x++;
-			break;
-		case E_DIR_R:
-			pos_y++;
-			break;
-		case E_DIR_L:
-			pos_y--;
-			break;
-		default:
-			break;
-		}
-
-		Draw();
-	}
-}
-
-void Bullet::Fly()
-{
-	m_dir = m_owner->m_dir;
-
-	pos_x = m_owner->pos_x + 1;
-	pos_y = m_owner->pos_y + 1;
-
-	switch (m_dir)
+	switch (b_dir)
 	{
 	case E_DIR_T:
-		pos_x -= 2;
+		bul_x = m_owner->pos_x - 1;
+		bul_y = m_owner->pos_y + 1;
 		break;
-
 	case E_DIR_B:
-		pos_x += 2;
+		bul_x = m_owner->pos_x + 3;
+		bul_y = m_owner->pos_y + 1;
 		break;
-
-	case E_DIR_L:
-		pos_y -= 2;
-		break;
-
 	case E_DIR_R:
-		pos_y += 2;
+		bul_x = m_owner->pos_x + 1;
+		bul_y = m_owner->pos_y + 3;
+		break;
+	case E_DIR_L:
+		bul_x = m_owner->pos_x + 1;
+		bul_y = m_owner->pos_y - 1;
 		break;
 	}
 
-	m_curClock = clock();
+	begin_t = clock();
+}
 
-	Draw();
+void bullet::tick() {
+	end_t = clock();
+	float sec = (float)(end_t - begin_t) / CLOCKS_PER_SEC;;
+	if (sec >= 0.2)
+	{
+		begin_t = clock();
+		clear();
+		fly();
+	}
+}
+
+void bullet::fly() {
+	switch (b_dir) {
+	case E_DIR_T:
+		bul_x--;
+		draw();
+		break;
+	case E_DIR_B:
+		bul_x++;
+		draw();
+		break;
+	case E_DIR_R:
+		bul_y++;
+		draw();
+		break;
+	case E_DIR_L:
+		bul_y--;
+		draw();
+		break;
+	}
 }
