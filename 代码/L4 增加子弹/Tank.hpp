@@ -1,11 +1,24 @@
 #pragma once
 #include "Common.h"
 #include "tools.hpp"
-#include "Bullet.h"
+#include"bullet.h"
+#include "GameMode.h"
 
+class GameMode;
 
 class Tank {
 public:
+	~Tank()
+	{
+		for (int i = 0; i < bul_num; ++i)
+		{
+			delete my_bul[i];
+			my_bul[i] = NULL;
+		}
+
+		bul_num = 0;
+	}
+
 	void draw_tank() {
 		static string out_look[4][3] = { "  ¡ö  ","¡ö¡ö¡ö","¡ö  ¡ö" ,"¡ö  ¡ö","¡ö¡ö¡ö" ,"  ¡ö  " ,"¡ö¡ö  ","  ¡ö¡ö","¡ö¡ö  ","  ¡ö¡ö","¡ö¡ö  ","  ¡ö¡ö" };
 
@@ -26,12 +39,19 @@ public:
 		}
 	}
 
-	void Tick()
-	{
-		for (std::list<Bullet*>::iterator iter = m_bullets.begin(); iter != m_bullets.end(); ++iter)
+
+	void fire() {
+		bullet *bul = new bullet(this);
+		my_bul[bul_num] = bul;
+		bul_num++;
+
+		bul->fire();
+	}
+
+	void tank_tick() {
+		for(int i = 0; i < bul_num; i++)
 		{
-			Bullet* bullet = *iter;
-			bullet->Tick();
+			my_bul[i]->tick();
 		}
 	}
 
@@ -39,63 +59,62 @@ public:
 	{
 		clear();
 
+		m_dir = dir;
+
 		switch (dir)
 		{
 		case E_DIR_T:
-			m_dir = E_DIR_T;
-
+		{
 			if (pos_x == 1)
 				break;
 			else
 				pos_x--;
 			break;
-
+		}
 		case E_DIR_B:
-			m_dir = E_DIR_B;
-
+		{
 			if (pos_x == 36)
 				break;
 			else
 				pos_x++;
 			break;
-
+		}
 		case E_DIR_L:
-			m_dir = E_DIR_L;
-
+		{
 			if (pos_y == 1)
 				break;
 			else
 				pos_y--;
 			break;
-
+		}
 		case E_DIR_R:
-			m_dir = E_DIR_R;
-
+		{
 			if (pos_y == 36)
 				break;
 			else
 				pos_y++;
 			break;
-
-		default:
-			break;
 		}
-
+		}
 
 		draw_tank();
 	}
 
-	void Fire()
-	{
-		Bullet* bullet = new Bullet(this);
-		m_bullets.push_back(bullet);
-		bullet->Fly();
-	}
-
-	void ProcessEvent(char ch)
+	void ProcessKeyBoard(char ch)
 	{
 		switch (ch)
 		{
+
+		case 'j':
+		case 'J':
+			fire();
+			break;
+
+		case 'q':
+		case 'Q':
+			Exit();
+			break;
+
 		case 'w':
 		case 'W':
 		{
@@ -122,19 +141,23 @@ public:
 			Move(E_DIR_R);
 			break;
 		}
-
-		case 'j':
-		case 'J':
-			Fire();
-			break;
 		}
+	}
+
+	void Exit()
+	{
+		for (int i = 0; i < bul_num; ++i)
+		{
+			my_bul[i]->clear();
+		}
+
+		GameMode::instance().ReturnToMainMenu();
 	}
 
 public:
 	int pos_x;
 	int pos_y;
-
+	bullet *my_bul[100];
+	int bul_num;
 	ETankDir m_dir;
-
-	std::list<Bullet*> m_bullets;
 };

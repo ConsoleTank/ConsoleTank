@@ -1,5 +1,5 @@
 
-#include "GameMode.hpp"
+#include "GameMode.h"
 
 int main()
 {
@@ -11,5 +11,5 @@ int main()
 
 	GameMode::instance().Tick();
 
-	GameMode::instance().Fini();
+	GameMode::instance().finish();
 }
