@@ -37,7 +37,6 @@ void bullet::fire()
 		break;
 	}
 
-	b_dir = m_owner->m_dir;
 
 	begin_t = clock();
 }
