@@ -9,5 +9,6 @@
     <ClInclude Include="GameMode.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Tank.hpp" />
+    <ClInclude Include="bullet.hpp" />
   </ItemGroup>
 </Project>

@@ -27,6 +27,7 @@
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Tank.hpp" />
     <ClInclude Include="tools.hpp" />
+    <ClInclude Include="bullet.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

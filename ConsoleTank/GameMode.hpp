@@ -6,7 +6,7 @@
 #include "tools.hpp"
 #include "Map.hpp"
 #include "Tank.hpp"
-
+#include"bullet.hpp"
 
 class GameMode
 {
@@ -141,6 +141,18 @@ public:
 		tank01->pos_y = 20;
 
 		tank01->draw_tank();
+		while (true)
+		{
+			if (_kbhit())
+			{
+				char ch = _getch();
+				if(ch=='j'||ch=='J')
+					tank01->fire();
+				else tank01->move(ch);
+				
+			}
+			tank01->tank_tick();
+		}
 	}
 
 	void OnMouse(INPUT_RECORD mouseRec)
@@ -176,10 +188,6 @@ public:
 		if (!if_in_game)
 			return;
 
-		if (cur_sel == 0)
-		{
-			tank01->move(mouseRec);
-		}
 		if (cur_sel == 2)
 		{
 

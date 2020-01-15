@@ -1,14 +1,8 @@
 #pragma once
 #include "Common.h"
 #include "tools.hpp"
+#include"bullet.hpp"
 
-enum ETankDir
-{
-	E_DIR_T = 0,
-	E_DIR_B,
-	E_DIR_R,
-	E_DIR_L,
-};
 
 class Tank {
 public:
@@ -32,12 +26,48 @@ public:
 		}
 	}
 
-	void move(INPUT_RECORD rec)
+
+	void fire() {
+		bullet *bul = new bullet;
+		my_bul[bul_num] = bul;
+		bul_num++;
+		switch (m_dir)
+		{
+		case E_DIR_T:
+			bul->bul_x = pos_x - 1;
+			bul->bul_y = pos_y + 1;
+			break;
+		case E_DIR_B:
+			bul->bul_x = pos_x + 3;
+			bul->bul_y = pos_y + 1;
+			break;
+		case E_DIR_R:
+			bul->bul_x = pos_x + 1;
+			bul->bul_y = pos_y + 3;
+			break;
+		case E_DIR_L:
+			bul->bul_x = pos_x + 1;
+			bul->bul_y = pos_y - 1;
+			break;
+		}
+		bul->b_dir = m_dir;
+		bul->begin_t = clock();
+
+	}
+
+	void tank_tick() {
+		for(int i = 0; i < bul_num; i++)
+		{
+			my_bul[i]->tick();
+		}
+	}
+
+	void move(char ch)
 	{
 
 		clear();
 
-		switch (rec.Event.KeyEvent.uChar.AsciiChar)
+		switch (ch)
 		{
 		case 'w':
 		case 'W':
@@ -95,6 +125,7 @@ public:
 public:
 	int pos_x;
 	int pos_y;
-
+	bullet *my_bul[100];
+	int bul_num;
 	ETankDir m_dir;
 };
