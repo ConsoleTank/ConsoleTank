@@ -11,8 +11,8 @@ enum ETankDir
 {
 	E_DIR_T = 0,
 	E_DIR_B,
-	E_DIR_R,
 	E_DIR_L,
+	E_DIR_R,
 };
 class Common {
 public:
@@ -22,7 +22,8 @@ public:
 	const static int GRASS = 2; // …d
 	const static int WATER = 3; // ¡Ë
 	const static int STONE = 4; // ¡ï
-	
+	const static int TANK = 5;
+	const static int BULLET = 6;
 };
 
 #endif // __COMMON_HPP__

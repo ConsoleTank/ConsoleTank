@@ -8,7 +8,7 @@ class Tank;
 class bullet {
 public:
 	bullet(Tank* owner);
-
+	~bullet();
 	void draw();
 	void clear();
 	void fire();

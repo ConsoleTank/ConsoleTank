@@ -108,7 +108,10 @@ void GameMode::Mode_editor_paint_info()
 	string draw_thing = "";
 	switch (draw_type)
 	{
-
+	case 0:
+		draw_thing = " ¡õ";
+		tools::DrawString(draw_thing, paint_pos_x, paint_pos_y);
+		break;
 	case 1:
 		draw_thing = "¡ö";
 		tools::DrawString(draw_thing, paint_pos_x, paint_pos_y);
@@ -128,6 +131,8 @@ void GameMode::Mode_editor_paint_info()
 		draw_thing = "¡ï";
 		tools::DrawString(draw_thing, paint_pos_x, paint_pos_y);
 		break;
+	
+
 	}
 
 }

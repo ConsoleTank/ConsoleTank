@@ -7,12 +7,22 @@ bullet::bullet(Tank* owner)
 	m_owner = owner;
 }
 
+bullet::~bullet() {
+	clear();
+	GameMode::instance().m_pmap->draw();
+}
+
 void bullet::draw() {
-	tools::DrawString("¡ñ", bul_x, bul_y);
+	if (GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] != Common::GRASS &&  GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] != Common::WATER)
+		GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] = Common::BULLET;
+	GameMode::instance().m_pmap->draw();
+
 }
 
 void bullet::clear() {
-	tools::DrawString("  ", bul_x, bul_y);
+	if (GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::GRASS || GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::WATER)
+		return;
+	GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] = Common::WALK;
 }
 
 void bullet::fire()

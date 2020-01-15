@@ -55,6 +55,12 @@ public:
 				case Common::STONE:
 					tools::DrawString(TEXT("¡ï"), i, j);
 					break;
+				case Common::TANK:
+					tools::DrawString(TEXT("¡ö"), i, j);
+					break;
+				case Common::BULLET:
+					tools::DrawString(TEXT("¡ñ"), i, j);
+					break;
 				}
 			}
 		}
