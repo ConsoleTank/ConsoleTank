@@ -17,6 +17,8 @@ void bullet::clear() {
 
 void bullet::fire()
 {
+	b_dir = m_owner->m_dir;
+
 	switch (b_dir)
 	{
 	case E_DIR_T:
@@ -36,7 +38,6 @@ void bullet::fire()
 		bul_y = m_owner->pos_y - 1;
 		break;
 	}
-
 
 	begin_t = clock();
 }
