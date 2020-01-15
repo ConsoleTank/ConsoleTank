@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Bullet.h"
 #include "Tank.hpp"
 
