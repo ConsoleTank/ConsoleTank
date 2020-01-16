@@ -24,6 +24,8 @@ public:
 	const static int STONE = 4; // бя
 	const static int TANK = 5;
 	const static int BULLET = 6;
+	const static int M_TANK = 7;
+	const static int M_BULLET = 8;
 };
 
 #endif // __COMMON_HPP__

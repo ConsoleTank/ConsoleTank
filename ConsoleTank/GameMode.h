@@ -32,6 +32,7 @@ public:
 	void ReturnToMainMenu();
 	void OnKeyBoard_Menu(char ch);
 	void OnMouseClick(int x, int y);
+	void multiplayer();
 
 public:
 	Map* m_pmap;
@@ -40,6 +41,9 @@ public:
 	int draw_type = Common::WALL;
 	bool running = true;
 	Tank *tank01;
+	Tank *tank02;
+	Tank *competitior[4];
+	int left_viral_num=0;
 };
 
 

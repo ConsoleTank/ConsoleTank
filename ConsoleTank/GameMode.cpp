@@ -13,6 +13,7 @@ void GameMode::welcome()
 {
 	m_pmap->load_map("welcome.txt");
 	m_pmap->draw();
+	m_pmap->real_draw();
 	Sleep(1500);
 
 }
@@ -42,6 +43,14 @@ bool GameMode::finish() {
 	delete tank01;
 	tank01 = NULL;
 
+	delete tank02;
+	tank02 = NULL;
+
+	for (int i = 0; i < 4; i++)
+	{
+		delete competitior[i];
+		competitior[i] = NULL;
+	}
 	return true;
 }
 
@@ -61,6 +70,7 @@ void GameMode::Tick()
 			char ch = _getch();
 			OnKeyBoard_Menu(ch);
 		}
+		m_pmap->real_draw();
 	}
 }
 
@@ -97,6 +107,7 @@ void GameMode::Mode_editor()
 		}
 
 		Mode_editor_paint_info();
+		m_pmap->real_draw();
 	}
 
 }
@@ -131,33 +142,173 @@ void GameMode::Mode_editor_paint_info()
 		draw_thing = "¡ï";
 		tools::DrawString(draw_thing, paint_pos_x, paint_pos_y);
 		break;
-	
+
 
 	}
 
 }
+void GameMode::multiplayer() {
+	static int pos_put_x[4] = { 6,17,30,33 };
+	static int pos_put_y[4] = { 32,14,10,5 };
 
-void GameMode::single_player() {
 	m_pmap->load_map("battle.txt");
 	m_pmap->draw();
 
 	if (!tank01)
 		tank01 = new Tank();
 
+	tank01->id = 1;
 	tank01->pos_x = 20;
 	tank01->pos_y = 20;
+	tank01->ori_pos_x = 20;
+	tank01->ori_pos_y = 20;
+	tank01->if_AI = false;
+
+	if (!tank02)
+		tank02 = new Tank();
+
+	tank02->id = 2;
+	tank02->pos_x = 5;
+	tank02->pos_y = 10;
+	tank02->ori_pos_x = 5;
+	tank02->ori_pos_y = 10;
+	tank02->if_AI = false;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (!competitior[i])
+			competitior[i] = new Tank();
+		competitior[i]->if_AI = true;
+		competitior[i]->m_dir = E_DIR_T;
+		competitior[i]->tank_begin = clock();
+		competitior[i]->fire_bigin = clock();
+		competitior[i]->pos_x = pos_put_x[i];
+		competitior[i]->pos_y = pos_put_y[i];
+		competitior[i]->ori_pos_x = pos_put_x[i];
+		competitior[i]->ori_pos_y = pos_put_y[i];
+		competitior[i]->draw_tank();
+	}
+
+	left_viral_num = 4;       //
 
 	tank01->draw_tank();
+	tank02->draw_tank();
+
 	while (if_in_game)
 	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (competitior[i]->if_live_tank)
+			{
+				competitior[i]->viral_move();
+				competitior[i]->viral_fire();
+			}
+			else {
+				competitior[i]->relive();
+			}
+			competitior[i]->tank_tick();
+		}
+
+		char ch[20];
+		sprintf_s(ch, " »÷É±Êý£º%d", tank01->kill_tanks);
+		tools::DrawString(ch, 10, 42);
+		sprintf_s(ch, " ËÀÍöÊý£º%d", tank01->dead_times);
+		tools::DrawString(ch, 11, 42);
+		sprintf_s(ch, " »÷É±Êý£º%d", tank02->kill_tanks);
+		tools::DrawString(ch, 12, 42);
+		sprintf_s(ch, " ËÀÍöÊý£º%d", tank02->dead_times);
+		tools::DrawString(ch, 13, 42);
+
 		tank01->tank_tick();
+		tank02->tank_tick();
+
 
 		if (_kbhit())
 		{
-			char ch = _getch();
+			int ch = _getch();
 
 			tank01->ProcessKeyBoard(ch);
+			tank02->ProcessKeyBoard(ch);
+
 		}
+
+		m_pmap->real_draw();
+	}
+
+
+}
+
+
+void GameMode::single_player() {
+	static int pos_put_x[4] = { 6,17,30,33 };
+	static int pos_put_y[4] = { 32,14,10,5 };
+
+	m_pmap->load_map("battle.txt");
+	m_pmap->draw();
+
+	if (!tank01)
+		tank01 = new Tank();
+
+	tank01->id = 1;
+	tank01->pos_x = 20;
+	tank01->pos_y = 20;
+	tank01->ori_pos_x = 20;
+	tank01->ori_pos_y = 20;
+	tank01->if_AI = false;
+
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (!competitior[i])
+			competitior[i] = new Tank();
+		competitior[i]->if_AI = true;
+		competitior[i]->m_dir = E_DIR_T;
+		competitior[i]->tank_begin = clock();
+		competitior[i]->fire_bigin = clock();
+		competitior[i]->pos_x = pos_put_x[i];
+		competitior[i]->pos_y = pos_put_y[i];
+		competitior[i]->ori_pos_x = pos_put_x[i];
+		competitior[i]->ori_pos_y = pos_put_y[i];
+		competitior[i]->draw_tank();
+	}
+
+	left_viral_num = 4;       //
+
+	tank01->draw_tank();
+
+
+	while (if_in_game)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (competitior[i]->if_live_tank)
+			{
+				//competitior[i]->viral_move();
+				competitior[i]->viral_fire();
+			}
+			else {
+				competitior[i]->relive();
+			}
+			competitior[i]->tank_tick();
+		}
+
+		char ch[20];
+		sprintf_s(ch, " »÷É±Êý£º%d", tank01->kill_tanks);
+		tools::DrawString(ch, 10, 42);
+		sprintf_s(ch, " ËÀÍöÊý£º%d", tank01->dead_times);
+		tools::DrawString(ch, 11, 42);
+
+		tank01->tank_tick();
+
+		
+			if (_kbhit())
+			{
+				int ch = _getch();
+				tank01->ProcessKeyBoard(ch);
+			}
+
+
+		m_pmap->real_draw();
 	}
 }
 
@@ -268,6 +419,7 @@ void GameMode::OnKeyBoard_Menu(char ch)
 			break;
 		case 1:
 			if_in_game = true;
+			multiplayer();
 			break;
 		case 2:
 			if_in_game = true;
