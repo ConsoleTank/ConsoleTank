@@ -264,6 +264,10 @@ void GameMode::ReturnToMainMenu()
 		delete tank01;
 		tank01 = NULL;
 	}
+
+	for (auto ele : cpu_tanks)
+		delete ele;
+	cpu_tanks.clear();
 }
 
 void GameMode::OnKeyBoard_Menu(char ch)
