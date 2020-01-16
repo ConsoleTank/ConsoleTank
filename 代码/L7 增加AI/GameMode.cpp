@@ -13,6 +13,7 @@ void GameMode::welcome()
 {
 	m_pmap->load_map("welcome.txt");
 	m_pmap->draw();
+	m_pmap->RealDraw();
 	Sleep(1500);
 
 }
