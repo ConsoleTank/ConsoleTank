@@ -20,7 +20,7 @@ void bullet::draw() {
 }
 
 void bullet::clear() {
-	if (GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::GRASS || GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::WATER)
+	if (GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::GRASS || GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::WATER|| GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::WALL)
 		return;
 	GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] = Common::WALK;
 }
@@ -48,18 +48,71 @@ void bullet::fire()
 		bul_y = m_owner->pos_y - 1;
 		break;
 	}
+	if_live = true;
+	if (GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::WALL)
+		if_live = false;
 
-	begin_t = clock();
+	if (if_live)
+	{
+		draw();
+		begin_t = clock();
+	}
+}
+
+void bullet::check() {
+	int tmp_x = bul_x;
+	int tmp_y = bul_y;
+	switch (b_dir)
+	{
+	case E_DIR_T:
+	{
+		tmp_x = bul_x - 1;
+		break;
+	}
+	case E_DIR_B:
+	{
+		tmp_x = bul_x + 1;
+		break;
+	}
+	case E_DIR_L:
+	{
+		tmp_y = bul_y - 1;
+		break;
+	}case E_DIR_R:
+	{
+		tmp_y = bul_y + 1;
+		break;
+	}
+	}
+	int now_pos = GameMode::instance().m_pmap->map[tmp_x* Common::LEN + tmp_y];
+	switch (now_pos)
+	{
+	case Common::WALL:
+		if_live = false;
+		break;
+	case Common::STONE:
+		GameMode::instance().m_pmap->map[tmp_x* Common::LEN + tmp_y] = Common::WALK;
+		GameMode::instance().m_pmap->draw();
+		if_live = false;
+		break;
+	default:
+		if_live = true;
+		break;
+	}
 }
 
 void bullet::tick() {
-	end_t = clock();
-	float sec = (float)(end_t - begin_t) / CLOCKS_PER_SEC;;
-	if (sec >= 0.2)
+	if (if_live)
 	{
-		begin_t = clock();
-		clear();
-		fly();
+		check();
+		end_t = clock();
+		float sec = (float)(end_t - begin_t) / CLOCKS_PER_SEC;;
+		if (sec >= 0.2)
+		{
+			begin_t = clock();
+			clear();
+			fly();
+		}
 	}
 }
 

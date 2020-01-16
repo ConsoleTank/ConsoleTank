@@ -14,6 +14,7 @@ public:
 	void fire();
 	void tick();
 	void fly();
+	void check();
 
 public:
 	int bul_x;
@@ -22,6 +23,6 @@ public:
 	int pace = 1;
 	clock_t begin_t;
 	clock_t end_t;
-
+	bool if_live=true;
 	Tank* m_owner;
 };

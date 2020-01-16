@@ -11,7 +11,7 @@ class Tank {
 public:
 	~Tank()
 	{
-		for (auto i=my_bullet.begin();i!=my_bullet.end();i++)
+		for (auto i = my_bullet.begin(); i != my_bullet.end(); i++)
 		{
 			delete (*i);
 			(*i) = NULL;
@@ -22,13 +22,13 @@ public:
 		bul_num = 0;
 	}
 
-	
+
 	void draw_tank() {
-		static int tank_map[4][9] = { 
-		{0,5,0,5,5,5,5,0,5}, 
+		static int tank_map[4][9] = {
+		{0,5,0,5,5,5,5,0,5},
 		{5,0,5,5,5,5,0,5,0} ,
 		{0,5,5,5,5,0,0,5,5},
-		{5,5,0,0,5,5,5,5,0} 
+		{5,5,0,0,5,5,5,5,0}
 		};
 		for (int i = 0; i < 3; i++)
 		{
@@ -59,7 +59,7 @@ public:
 
 	void fire() {
 		bullet *bul = new bullet(this);
-		my_bullet.push_back( bul);
+		my_bullet.push_back(bul);
 		bul_num++;
 
 		bul->fire();
@@ -67,85 +67,57 @@ public:
 
 	void tank_tick() {
 
-		for (auto i = my_bullet.begin(); i != my_bullet.end(); )
-		{
-
-			int tmp_x = (*i)->bul_x;
-			int tmp_y= (*i)->bul_y;
-			switch ((*i)->b_dir)
-			{
-			case E_DIR_T:
-			{
-				tmp_x = (*i)->bul_x - 1;
-				break;
-			}
-			case E_DIR_B:
-			{
-				tmp_x = (*i)->bul_x + 1;
-				break;
-			}
-			case E_DIR_L:
-			{
-				tmp_y = (*i)->bul_y-1;
-				break;
-			}case E_DIR_R:
-			{
-				tmp_y = (*i)->bul_y+1;
-				break;
-			}
-			}
-			int pos_info = GameMode::instance().m_pmap->map[tmp_x* Common::LEN + tmp_y];
-			bullet *temp = NULL;
-			switch (pos_info) 
-			{
-			case Common::WALL:
-				temp = *i;
-				i = my_bullet.erase(i);
-				delete temp;
-				break;
-			case Common::STONE:
-				temp = *i;
-				i = my_bullet.erase(i);
-				delete temp;
-				GameMode::instance().m_pmap->map[tmp_x* Common::LEN + tmp_y] = Common::WALK;
-				GameMode::instance().m_pmap->draw();
-
-				break;
-			default:
-				++i;
-				break;
-			}
-				
-			
-		}
 		for (auto i = my_bullet.begin(); i != my_bullet.end(); i++)
 		{
 			(*i)->tick();
 		}
+		for (auto i = my_bullet.begin(); i != my_bullet.end(); )
+		{
+			bullet *temp = NULL;
+			if (!(*i)->if_live)
+			{
+				temp = *i;
+				i = my_bullet.erase(i);
+				delete temp;
+			}
+			else {
+				++i;
+			}
+		}
 	}
 
-	
+	bool judge(int x, int y, bool if_col) {
+		{
+			for (int i = 0; i < 3; i++)
+			{
+
+				int judge_op = 0;
+				if (!if_col)
+					judge_op = GameMode::instance().m_pmap->map[x* Common::LEN + y + i];
+				else
+					judge_op = GameMode::instance().m_pmap->map[(x + i)* Common::LEN + y];
+				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+	}
+
 	void Move(ETankDir dir)
 	{
 		clear();
-		
+
 		m_dir = dir;
 
-		bool judge = true;
+
 		switch (dir)
 		{
 		case E_DIR_T:
 		{
-			for (int i = 0; i < 3; i++)
-			{
-				int judge_op = GameMode::instance().m_pmap->map[(pos_x - 1)* Common::LEN + pos_y + i];
-				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER)
-				{
-					judge = false;
-					break;
-				}
-			}
-			if (!judge)
+			if (!judge(pos_x - 1, pos_y, false))
 				break;
 			else
 				pos_x--;
@@ -153,16 +125,7 @@ public:
 		}
 		case E_DIR_B:
 		{
-			for (int i = 0; i < 3; i++)
-			{
-				int judge_op = GameMode::instance().m_pmap->map[(pos_x + 3)* Common::LEN + pos_y + i];
-				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER)
-				{
-					judge = false;
-					break;
-				}
-			}
-			if (!judge)
+			if (!judge(pos_x + 3, pos_y, false))
 				break;
 			else
 				pos_x++;
@@ -170,16 +133,7 @@ public:
 		}
 		case E_DIR_L:
 		{
-			for (int i = 0; i < 3; i++)
-			{
-				int judge_op = GameMode::instance().m_pmap->map[(pos_x + i )* Common::LEN + pos_y - 1];
-				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER)
-				{
-					judge = false;
-					break;
-				}
-			}
-			if (!judge)
+			if (!judge(pos_x, pos_y - 1, true))
 				break;
 			else
 				pos_y--;
@@ -187,16 +141,7 @@ public:
 		}
 		case E_DIR_R:
 		{
-			for (int i = 0; i < 3; i++)
-			{
-				int judge_op = GameMode::instance().m_pmap->map[(pos_x + i)* Common::LEN + pos_y + 3];
-				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER)
-				{
-					judge = false;
-					break;
-				}
-			}
-			if (!judge)
+			if (!judge(pos_x, pos_y + 3, true))
 				break;
 			else
 				pos_y++;
@@ -255,7 +200,7 @@ public:
 	{
 		for (auto i = my_bullet.begin(); i != my_bullet.end(); i++)
 		{
-			(*i) ->clear();
+			(*i)->clear();
 		}
 		GameMode::instance().ReturnToMainMenu();
 	}
