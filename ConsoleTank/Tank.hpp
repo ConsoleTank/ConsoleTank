@@ -36,29 +36,22 @@ public:
 		{0,5,5,5,5,0,0,5,5},
 		{5,5,0,0,5,5,5,5,0}
 		};
-		if (if_AI)
+
+		for (int i = 0; i < 3; i++)
 		{
-			for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
 			{
-				for (int j = 0; j < 3; j++)
-				{
-					if (GameMode::instance().m_pmap->map[(i + pos_x)*Common::LEN + pos_y + j] == Common::GRASS)
-						continue;
-					GameMode::instance().m_pmap->map[(i + pos_x)*Common::LEN + pos_y + j] = tank_map[(int)m_dir][i * 3 + j];
-				}
+				int& type = GameMode::instance().m_pmap->map[(i + pos_x)*Common::LEN + pos_y + j];
+				if (type == Common::GRASS)
+					continue;
+
+				if(if_AI)
+					type = tank_map[(int)m_dir][i * 3 + j];
+				else
+					type = m_tank_map[(int)m_dir][i * 3 + j];
 			}
 		}
-		else {
-			for (int i = 0; i < 3; i++)
-			{
-				for (int j = 0; j < 3; j++)
-				{
-					if (GameMode::instance().m_pmap->map[(i + pos_x)*Common::LEN + pos_y + j] == Common::GRASS)
-						continue;
-					GameMode::instance().m_pmap->map[(i + pos_x)*Common::LEN + pos_y + j] = m_tank_map[(int)m_dir][i * 3 + j];
-				}
-			}
-		}
+
 		GameMode::instance().m_pmap->draw();
 	}
 
@@ -107,30 +100,30 @@ public:
 			relive();
 	}
 
-	bool judge(int x, int y, bool if_col) {
+	bool judge(int x, int y, bool if_col)
+	{
+		for (int i = 0; i < 3; i++)
 		{
-			for (int i = 0; i < 3; i++)
+
+			int judge_op = 0;
+			if (!if_col)
+				judge_op = GameMode::instance().m_pmap->map[x* Common::LEN + y + i];
+			else
+				judge_op = GameMode::instance().m_pmap->map[(x + i)* Common::LEN + y];
+			if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER || judge_op == Common::TANK || judge_op == Common::BULLET || judge_op == Common::M_TANK || judge_op == Common::M_BULLET)
 			{
-
-				int judge_op = 0;
-				if (!if_col)
-					judge_op = GameMode::instance().m_pmap->map[x* Common::LEN + y + i];
-				else
-					judge_op = GameMode::instance().m_pmap->map[(x + i)* Common::LEN + y];
-				if (judge_op == Common::STONE || judge_op == Common::WALL || judge_op == Common::WATER || judge_op == Common::TANK || judge_op == Common::BULLET || judge_op == Common::M_TANK || judge_op == Common::M_BULLET)
-				{
-					return false;
-				}
+				return false;
 			}
-			return true;
 		}
-
+		return true;
 	}
+
 
 	void Move(ETankDir dir)
 	{
 		if (!if_live_tank)
 			return;
+
 		clear();
 
 		m_dir = dir;
@@ -202,6 +195,9 @@ public:
 
 	void ProcessKeyBoard(int ch)
 	{
+		if (!if_live_tank)
+			return;
+
 		if (if_AI)
 			return;
 

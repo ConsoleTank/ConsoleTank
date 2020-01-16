@@ -111,7 +111,7 @@ void bullet::check() {
 		if_live = false;
 		int tank_pos_x;
 		int tank_pos_y;
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < GameMode::instance().left_viral_num; i++)
 		{
 			tank_pos_x = GameMode::instance().competitior[i]->pos_x;
 			tank_pos_y = GameMode::instance().competitior[i]->pos_y;
@@ -129,38 +129,10 @@ void bullet::check() {
 				GameMode::instance().competitior[i]->clear();
 				GameMode::instance().competitior[i]->dead_time = clock();
 				m_owner->kill_tanks++;
+				GameMode::instance().competitior[i]->dead_times++;
 			}
 
 
-		}
-		if (GameMode::instance().tank01->if_live_tank &&GameMode::instance().tank01->if_AI != m_owner->if_AI)
-
-		{
-			tank_pos_x = GameMode::instance().tank01->pos_x;
-			tank_pos_y = GameMode::instance().tank01->pos_y;
-			if (bul_x >= tank_pos_x - 1 && bul_x <= tank_pos_x + 3 &&
-				bul_y >= tank_pos_y - 1 && bul_y <= tank_pos_y + 3)
-			{
-				GameMode::instance().tank01->if_live_tank = false;
-				GameMode::instance().tank01->clear();
-				GameMode::instance().tank01->dead_time = clock();
-				GameMode::instance().tank01->dead_times++;
-			}
-		}
-
-		if (GameMode::instance().tank02  && GameMode::instance().tank02->if_live_tank &&GameMode::instance().tank02->if_AI != m_owner->if_AI)
-
-		{
-			tank_pos_x = GameMode::instance().tank02->pos_x;
-			tank_pos_y = GameMode::instance().tank02->pos_y;
-			if (bul_x >= tank_pos_x - 1 && bul_x <= tank_pos_x + 3 &&
-				bul_y >= tank_pos_y - 1 && bul_y <= tank_pos_y + 3)
-			{
-				GameMode::instance().tank02->if_live_tank = false;
-				GameMode::instance().tank02->clear();
-				GameMode::instance().tank02->dead_time = clock();
-				GameMode::instance().tank02->dead_times++;
-			}
 		}
 		break;
 	default:

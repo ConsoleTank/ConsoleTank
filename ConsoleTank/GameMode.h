@@ -42,7 +42,7 @@ public:
 	bool running = true;
 	Tank *tank01;
 	Tank *tank02;
-	Tank *competitior[4];
+	Tank *competitior[6];
 	int left_viral_num=0;
 };
 
