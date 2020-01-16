@@ -34,41 +34,56 @@ public:
 	}
 
 	void draw() {
-		for (int i = 0; i < Common::LEN; i++)
+		judge_draw = true;
+	}
+
+	void real_draw() {
+		if (judge_draw)
 		{
-			for (int j = 0; j < Common::LEN; j++)
+			for (int i = 0; i < Common::LEN; i++)
 			{
-				int type = map[i * Common::LEN + j];
-				switch (type) {
-				case Common::WALK:
-					tools::DrawString(TEXT("  "), i, j);
-					break;
-				case Common::WALL:
-					tools::DrawString(TEXT("¡ö"), i, j);
-					break;
-				case Common::GRASS:
-					tools::DrawString(TEXT("…d"), i, j);
-					break;
-				case Common::WATER:
-					tools::DrawString(TEXT("¡Ë"), i, j);
-					break;
-				case Common::STONE:
-					tools::DrawString(TEXT("¡ï"), i, j);
-					break;
-				case Common::TANK:
-					tools::DrawString(TEXT("¡ö"), i, j);
-					break;
-				case Common::BULLET:
-					tools::DrawString(TEXT("¡ñ"), i, j);
-					break;
+				for (int j = 0; j < Common::LEN; j++)
+				{
+					int type = map[i * Common::LEN + j];
+					switch (type) {
+					case Common::WALK:
+						tools::DrawString(TEXT("  "), i, j);
+						break;
+					case Common::WALL:
+						tools::DrawString(TEXT("¡ö"), i, j);
+						break;
+					case Common::GRASS:
+						tools::DrawString(TEXT("…d"), i, j , 0xA2);
+						break;
+					case Common::WATER:
+						tools::DrawString(TEXT("¡Ë"), i, j, 0x92);
+						break;
+					case Common::STONE:
+						tools::DrawString(TEXT("¡ï"), i, j ,0x08);
+						break;
+					case Common::TANK:
+						tools::DrawString(TEXT("¡ö"), i, j, 0x02);
+						break;
+					case Common::BULLET:
+						tools::DrawString(TEXT("¡ñ"), i, j,0x02);
+						break;
+					case Common::M_TANK:
+						tools::DrawString(TEXT("¡ö"), i, j, 0x04);
+						break;
+					case Common::M_BULLET:
+						tools::DrawString(TEXT("¡ñ"), i, j, 0x04);
+						break;
+					}
 				}
 			}
 		}
+		judge_draw = false;
 
 	}
 
 public:
 	int map[Common::LEN*Common::LEN] = { 0 };
+	bool judge_draw = true;
 };
 
 #endif // __GAMEMODE_HPP__
