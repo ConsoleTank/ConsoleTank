@@ -6,7 +6,6 @@
 *.lo
 *.o
 *.obj
-*.exe
 
 # Precompiled Headers
 *.gch
@@ -26,7 +25,6 @@
 *.a
 
 # Executables
-*.exe
 *.out
 *.app
 
