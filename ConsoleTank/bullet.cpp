@@ -13,53 +13,53 @@ bullet::~bullet() {
 }
 
 void bullet::draw() {
-	if (!if_live)
+	if (!get_live())
 		return;
-	if (GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] != Common::GRASS &&  GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] != Common::WATER)
+	if (GameMode::instance().m_pmap->map[pos_x* Common::LEN + pos_y] != Common::GRASS &&  GameMode::instance().m_pmap->map[pos_x* Common::LEN + pos_y] != Common::WATER)
 	{
 		if (m_owner->if_AI)
-			GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] = Common::BULLET;
+			GameMode::instance().m_pmap->map[pos_x* Common::LEN + pos_y] = Common::BULLET;
 		else 
-			GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] = Common::M_BULLET;
+			GameMode::instance().m_pmap->map[pos_x* Common::LEN + pos_y] = Common::M_BULLET;
 	}
 	GameMode::instance().m_pmap->draw();
 
 }
 
 void bullet::clear() {
-	if (GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::GRASS || GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::WATER || GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::WALL)
+	if (GameMode::instance().m_pmap->map[pos_x* Common::LEN + pos_y] == Common::GRASS || GameMode::instance().m_pmap->map[pos_x* Common::LEN + pos_y] == Common::WATER || GameMode::instance().m_pmap->map[pos_x* Common::LEN + pos_y] == Common::WALL)
 		return;
-	GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] = Common::WALK;
+	GameMode::instance().m_pmap->map[pos_x* Common::LEN + pos_y] = Common::WALK;
 }
 
 void bullet::fire()
 {
-	b_dir = m_owner->m_dir;
+	dir = m_owner->dir;
 
-	switch (b_dir)
+	switch (dir)
 	{
 	case E_DIR_T:
-		bul_x = m_owner->pos_x - 1;
-		bul_y = m_owner->pos_y + 1;
+		pos_x = m_owner->pos_x - 1;
+		pos_y = m_owner->pos_y + 1;
 		break;
 	case E_DIR_B:
-		bul_x = m_owner->pos_x + 3;
-		bul_y = m_owner->pos_y + 1;
+		pos_x = m_owner->pos_x + 3;
+		pos_y = m_owner->pos_y + 1;
 		break;
 	case E_DIR_R:
-		bul_x = m_owner->pos_x + 1;
-		bul_y = m_owner->pos_y + 3;
+		pos_x = m_owner->pos_x + 1;
+		pos_y = m_owner->pos_y + 3;
 		break;
 	case E_DIR_L:
-		bul_x = m_owner->pos_x + 1;
-		bul_y = m_owner->pos_y - 1;
+		pos_x = m_owner->pos_x + 1;
+		pos_y = m_owner->pos_y - 1;
 		break;
 	}
-	if_live = true;
-	if (GameMode::instance().m_pmap->map[bul_x* Common::LEN + bul_y] == Common::WALL)
-		if_live = false;
+	change_live(true);
+	if (GameMode::instance().m_pmap->map[pos_x* Common::LEN + pos_y] == Common::WALL)
+		change_live(false);
 
-	if (if_live)
+	if (get_live())
 	{
 		draw();
 		begin_t = clock();
@@ -67,27 +67,27 @@ void bullet::fire()
 }
 
 void bullet::check() {
-	int tmp_x = bul_x;
-	int tmp_y = bul_y;
-	switch (b_dir)
+	int tmp_x = pos_x;
+	int tmp_y = pos_y;
+	switch (dir)
 	{
 	case E_DIR_T:
 	{
-		tmp_x = bul_x - 1;
+		tmp_x = pos_x - 1;
 		break;
 	}
 	case E_DIR_B:
 	{
-		tmp_x = bul_x + 1;
+		tmp_x = pos_x + 1;
 		break;
 	}
 	case E_DIR_L:
 	{
-		tmp_y = bul_y - 1;
+		tmp_y = pos_y - 1;
 		break;
 	}case E_DIR_R:
 	{
-		tmp_y = bul_y + 1;
+		tmp_y = pos_y + 1;
 		break;
 	}
 	}
@@ -95,20 +95,20 @@ void bullet::check() {
 	switch (now_pos)
 	{
 	case Common::WALL:
-		if_live = false;
+		change_live(false);
 		break;
 	case Common::STONE:
 		GameMode::instance().m_pmap->map[tmp_x* Common::LEN + tmp_y] = Common::WALK;
 		GameMode::instance().m_pmap->draw();
-		if_live = false;
+		change_live(false);
 		break;
 	case Common::BULLET:
 	case Common::M_BULLET:
-		if_live = false;
+		change_live(false);
 		break;
 	case Common::TANK:
 	case Common::M_TANK:
-		if_live = false;
+		change_live(false);
 		int tank_pos_x;
 		int tank_pos_y;
 		for (int i = 0; i < GameMode::instance().left_viral_num; i++)
@@ -116,16 +116,16 @@ void bullet::check() {
 			tank_pos_x = GameMode::instance().competitior[i]->pos_x;
 			tank_pos_y = GameMode::instance().competitior[i]->pos_y;
 
-			if (!GameMode::instance().competitior[i]->if_live_tank)
+			if (!GameMode::instance().competitior[i]->get_live())
 				continue;
 			
 			if (GameMode::instance().competitior[i]->if_AI == m_owner->if_AI)
 				continue;
 
-			if (bul_x >= tank_pos_x - 1 && bul_x <= tank_pos_x + 3 &&
-				bul_y >= tank_pos_y - 1 && bul_y <= tank_pos_y + 3)
+			if (pos_x >= tank_pos_x - 1 && pos_x <= tank_pos_x + 3 &&
+				pos_y >= tank_pos_y - 1 && pos_y <= tank_pos_y + 3)
 			{
-				GameMode::instance().competitior[i]->if_live_tank = false;
+				GameMode::instance().competitior[i]->change_live(false);
 				GameMode::instance().competitior[i]->clear();
 				GameMode::instance().competitior[i]->dead_time = clock();
 				m_owner->kill_tanks++;
@@ -135,14 +135,19 @@ void bullet::check() {
 
 		}
 		break;
+	case Common::BASE:
+	{
+		GameMode::instance().m_base->change_live(false);
+		break;
+	}
 	default:
-		if_live = true;
+		change_live(true);
 		break;
 	}
 }
 
 void bullet::tick() {
-	if (if_live)
+	if (get_live())
 	{
 		check();
 		end_t = clock();
@@ -157,23 +162,23 @@ void bullet::tick() {
 }
 
 void bullet::fly() {
-	if (!if_live)
+	if (!get_live())
 		return;
-	switch (b_dir) {
+	switch (dir) {
 	case E_DIR_T:
-		bul_x--;
+		pos_x--;
 		draw();
 		break;
 	case E_DIR_B:
-		bul_x++;
+		pos_x++;
 		draw();
 		break;
 	case E_DIR_R:
-		bul_y++;
+		pos_y++;
 		draw();
 		break;
 	case E_DIR_L:
-		bul_y--;
+		pos_y--;
 		draw();
 		break;
 	}

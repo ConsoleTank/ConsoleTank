@@ -2,6 +2,7 @@
 #define __GAMEMODE_HPP__
 
 #include "Common.h"
+#include "base.h"
 
 #include "tools.hpp"
 #include "Map.hpp"
@@ -44,6 +45,8 @@ public:
 	Tank *tank02;
 	Tank *competitior[6];
 	int left_viral_num=0;
+	bool game_over=false;
+	base *m_base;
 };
 
 

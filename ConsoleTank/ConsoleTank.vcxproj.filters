@@ -4,6 +4,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="element.cpp" />
+    <ClCompile Include="base.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tools.hpp" />
@@ -12,5 +14,7 @@
     <ClInclude Include="Tank.hpp" />
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="element.h" />
+    <ClInclude Include="base.h" />
   </ItemGroup>
 </Project>

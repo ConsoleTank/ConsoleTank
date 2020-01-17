@@ -5,9 +5,11 @@
 #include "GameMode.h"
 #include <list>
 #include "Map.hpp"
+
+
 class GameMode;
 
-class Tank {
+class Tank: public element{	
 public:
 	~Tank()
 	{
@@ -46,9 +48,9 @@ public:
 					continue;
 
 				if(if_AI)
-					type = tank_map[(int)m_dir][i * 3 + j];
+					type = tank_map[(int)dir][i * 3 + j];
 				else
-					type = m_tank_map[(int)m_dir][i * 3 + j];
+					type = m_tank_map[(int)dir][i * 3 + j];
 			}
 		}
 
@@ -86,7 +88,7 @@ public:
 		for (auto i = my_bullet.begin(); i != my_bullet.end(); )
 		{
 			bullet *temp = NULL;
-			if (!(*i)->if_live)
+			if (!(*i)->get_live())
 			{
 				temp = *i;
 				i = my_bullet.erase(i);
@@ -96,7 +98,7 @@ public:
 				++i;
 			}
 		}
-		if (!if_live_tank)
+		if (!get_live())
 			relive();
 	}
 
@@ -119,14 +121,14 @@ public:
 	}
 
 
-	void Move(ETankDir dir)
+	void Move(ETankDir m_dir)
 	{
-		if (!if_live_tank)
+		if (!get_live())
 			return;
 
 		clear();
 
-		m_dir = dir;
+		dir = m_dir;
 
 
 		switch (dir)
@@ -138,7 +140,7 @@ public:
 				if (!if_AI)
 					break;
 				else {
-					m_dir = E_DIR_R;
+					dir = E_DIR_R;
 				}
 			}
 			else
@@ -152,7 +154,7 @@ public:
 				if (!if_AI)
 					break;
 				else {
-					m_dir = E_DIR_L;
+					dir = E_DIR_L;
 				}
 			}
 			else
@@ -167,7 +169,7 @@ public:
 				if (!if_AI)
 					break;
 				else {
-					m_dir = E_DIR_T;
+					dir = E_DIR_T;
 				}
 			}
 			else
@@ -181,7 +183,7 @@ public:
 				if (!if_AI)
 					break;
 				else {
-					m_dir = E_DIR_B;
+					dir = E_DIR_B;
 				}
 			}
 			else
@@ -195,7 +197,7 @@ public:
 
 	void ProcessKeyBoard(int ch)
 	{
-		if (!if_live_tank)
+		if (!get_live())
 			return;
 
 		if (if_AI)
@@ -286,7 +288,7 @@ public:
 		if (sec >= .5f)
 		{
 			tank_begin = clock();
-			Move(m_dir);
+			Move(dir);
 		}
 	}
 
@@ -307,7 +309,7 @@ public:
 		float sec = (float)(again_time - dead_time) / CLOCKS_PER_SEC;;
 		if (sec >= 5.0)
 		{
-			if_live_tank = true;
+			change_live(true);
 			pos_x = ori_pos_x;
 			pos_y = ori_pos_y;
 			draw_tank();
@@ -325,17 +327,13 @@ public:
 	}
 
 public:
-	int pos_x;
-	int pos_y;
 	list <bullet*>my_bullet;
 	int bul_num;
 	bool if_AI;
-	ETankDir m_dir;
 	clock_t tank_begin;
 	clock_t tank_move_time;
 	clock_t fire_bigin;
 	clock_t fire_end;
-	bool if_live_tank = true;
 	clock_t dead_time;
 	clock_t again_time;
 	int dead_times;

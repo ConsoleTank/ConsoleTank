@@ -22,9 +22,13 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="element.cpp" />
+    <ClCompile Include="base.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="element.h" />
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Tank.hpp" />

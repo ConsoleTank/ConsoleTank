@@ -46,7 +46,7 @@ bool GameMode::finish() {
 		delete competitior[i];
 		competitior[i] = NULL;
 	}
-	
+
 	delete m_pmap;
 	m_pmap = NULL;
 
@@ -180,6 +180,15 @@ void GameMode::multiplayer() {
 	tank02->if_AI = false;
 	competitior[left_viral_num] = tank02;
 
+	if (!m_base)
+	{
+		m_base = new base();
+	}
+
+	m_base->change_live(true);
+	m_base->pos_x = 36;
+	m_base->pos_y = 18;
+
 	left_viral_num++;
 
 	for (int i = 0; i < 4; i++)
@@ -187,7 +196,7 @@ void GameMode::multiplayer() {
 		if (!competitior[left_viral_num])
 			competitior[left_viral_num] = new Tank();
 		competitior[left_viral_num]->if_AI = true;
-		competitior[left_viral_num]->m_dir = E_DIR_T;
+		competitior[left_viral_num]->dir = E_DIR_T;
 		competitior[left_viral_num]->tank_begin = clock();
 		competitior[left_viral_num]->fire_bigin = clock();
 		competitior[left_viral_num]->pos_x = pos_put_x[i];
@@ -203,39 +212,51 @@ void GameMode::multiplayer() {
 
 	while (if_in_game)
 	{
-		for (int i = 0; i < left_viral_num; i++)
+		if (game_over == false)
 		{
-			if (competitior[i]->if_AI && competitior[i]->if_live_tank)
+			for (int i = 0; i < left_viral_num; i++)
 			{
-				competitior[i]->viral_move();
-				competitior[i]->viral_fire();
+				if (competitior[i]->if_AI && competitior[i]->get_live())
+				{
+					competitior[i]->viral_move();
+					competitior[i]->viral_fire();
+				}
+
+				competitior[i]->tank_tick();
 			}
 
-			competitior[i]->tank_tick();
+			char ch[20];
+			sprintf_s(ch, " »÷É±Êý£º%d", tank01->kill_tanks);
+			tools::DrawString(ch, 10, 42);
+			sprintf_s(ch, " ËÀÍöÊý£º%d", tank01->dead_times);
+			tools::DrawString(ch, 11, 42);
+			sprintf_s(ch, " »÷É±Êý£º%d", tank02->kill_tanks);
+			tools::DrawString(ch, 12, 42);
+			sprintf_s(ch, " ËÀÍöÊý£º%d", tank02->dead_times);
+			tools::DrawString(ch, 13, 42);
+
+
+			if (_kbhit())
+			{
+				int ch = _getch();
+
+				tank01->ProcessKeyBoard(ch);
+				tank02->ProcessKeyBoard(ch);
+
+			}
+			m_base->draw();
+
+			m_pmap->real_draw();
 		}
 
-		char ch[20];
-		sprintf_s(ch, " »÷É±Êý£º%d", tank01->kill_tanks);
-		tools::DrawString(ch, 10, 42);
-		sprintf_s(ch, " ËÀÍöÊý£º%d", tank01->dead_times);
-		tools::DrawString(ch, 11, 42);
-		sprintf_s(ch, " »÷É±Êý£º%d", tank02->kill_tanks);
-		tools::DrawString(ch, 12, 42);
-		sprintf_s(ch, " ËÀÍöÊý£º%d", tank02->dead_times);
-		tools::DrawString(ch, 13, 42);
-
-
-		if (_kbhit())
+		else
 		{
-			int ch = _getch();
-
-			tank01->ProcessKeyBoard(ch);
-			tank02->ProcessKeyBoard(ch);
-
+			m_base->end_game();
+			Sleep(1500);
+			ReturnToMainMenu();
 		}
-
-		m_pmap->real_draw();
 	}
+
 
 
 }
@@ -253,12 +274,22 @@ void GameMode::single_player() {
 	if (!tank01)
 		tank01 = new Tank();
 
+	if (!m_base)
+	{
+		m_base = new base();
+	}
+
 	tank01->id = 1;
 	tank01->pos_x = 20;
 	tank01->pos_y = 20;
 	tank01->ori_pos_x = 20;
 	tank01->ori_pos_y = 20;
 	tank01->if_AI = false;
+
+	m_base->change_live(true);
+	m_base->pos_x = 36;
+	m_base->pos_y = 18;
+
 
 	competitior[left_viral_num] = tank01;
 
@@ -269,7 +300,7 @@ void GameMode::single_player() {
 		if (!competitior[left_viral_num])
 			competitior[left_viral_num] = new Tank();
 		competitior[left_viral_num]->if_AI = true;
-		competitior[left_viral_num]->m_dir = E_DIR_T;
+		competitior[left_viral_num]->dir = E_DIR_T;
 		competitior[left_viral_num]->tank_begin = clock();
 		competitior[left_viral_num]->fire_bigin = clock();
 		competitior[left_viral_num]->pos_x = pos_put_x[i];
@@ -285,31 +316,41 @@ void GameMode::single_player() {
 
 	while (if_in_game)
 	{
-		for (int i = 0; i < left_viral_num; i++)
+		if (game_over == false)
 		{
-			if (competitior[i]->if_AI && competitior[i]->if_live_tank)
+			for (int i = 0; i < left_viral_num; i++)
 			{
-				competitior[i]->viral_move();
-				competitior[i]->viral_fire();
+				if (competitior[i]->if_AI && competitior[i]->get_live())
+				{
+					competitior[i]->viral_move();
+					competitior[i]->viral_fire();
+				}
+				competitior[i]->tank_tick();
 			}
-			competitior[i]->tank_tick();
+
+			char ch[20];
+			sprintf_s(ch, " »÷É±Êý£º%d", tank01->kill_tanks);
+			tools::DrawString(ch, 10, 42);
+			sprintf_s(ch, " ËÀÍöÊý£º%d", tank01->dead_times);
+			tools::DrawString(ch, 11, 42);
+
+
+			if (_kbhit())
+			{
+				int ch = _getch();
+				tank01->ProcessKeyBoard(ch);
+			}
+
+			m_base->draw();
+
+			m_pmap->real_draw();
 		}
-
-		char ch[20];
-		sprintf_s(ch, " »÷É±Êý£º%d", tank01->kill_tanks);
-		tools::DrawString(ch, 10, 42);
-		sprintf_s(ch, " ËÀÍöÊý£º%d", tank01->dead_times);
-		tools::DrawString(ch, 11, 42);
-
-
-		if (_kbhit())
+		else
 		{
-			int ch = _getch();
-			tank01->ProcessKeyBoard(ch);
+			m_base->end_game();
+			Sleep(1500);
+			ReturnToMainMenu();
 		}
-
-
-		m_pmap->real_draw();
 	}
 }
 
@@ -381,10 +422,20 @@ void GameMode::ReturnToMainMenu()
 	m_pmap->load_map("map.txt");
 	m_pmap->draw();
 
+	for (int i = 0; i < left_viral_num; i++)
+	{
+		delete competitior[i];
+		competitior[i] = NULL;
+	}
+	tank01 = NULL;
+	if (tank02)
+		tank02 = NULL;
+
+	left_viral_num = 0;
 
 	for (int i = 0; i < 4; ++i)
 	{
-		tools::DrawString(TEXT("            "), 10+i, 42);
+		tools::DrawString(TEXT("            "), 10 + i, 42);
 	}
 }
 
@@ -415,10 +466,12 @@ void GameMode::OnKeyBoard_Menu(char ch)
 		switch (cur_sel)
 		{
 		case 0:
+			game_over = false;
 			if_in_game = true;
 			single_player();
 			break;
 		case 1:
+			game_over = false;
 			if_in_game = true;
 			multiplayer();
 			break;

@@ -53,25 +53,28 @@ public:
 						tools::DrawString(TEXT("¡ö"), i, j);
 						break;
 					case Common::GRASS:
-						tools::DrawString(TEXT("…d"), i, j , 0xA2);
+						tools::DrawString(TEXT("…d"), i, j, 0xA2);
 						break;
 					case Common::WATER:
 						tools::DrawString(TEXT("¡Ë"), i, j, 0x92);
 						break;
 					case Common::STONE:
-						tools::DrawString(TEXT("¡ï"), i, j ,0x08);
+						tools::DrawString(TEXT("¡õ"), i, j, 0x08);
 						break;
 					case Common::TANK:
 						tools::DrawString(TEXT("¡ö"), i, j, 0x02);
 						break;
 					case Common::BULLET:
-						tools::DrawString(TEXT("¡ñ"), i, j,0x02);
+						tools::DrawString(TEXT("¡ñ"), i, j, 0x02);
 						break;
 					case Common::M_TANK:
 						tools::DrawString(TEXT("¡ö"), i, j, 0x04);
 						break;
 					case Common::M_BULLET:
 						tools::DrawString(TEXT("¡ñ"), i, j, 0x04);
+						break;
+					case Common::BASE:
+						tools::DrawString(TEXT("¡ï"), i, j, 0xE2);
 						break;
 					}
 				}

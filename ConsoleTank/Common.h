@@ -26,6 +26,7 @@ public:
 	const static int BULLET = 6;
 	const static int M_TANK = 7;
 	const static int M_BULLET = 8;
+	const static int BASE = 9;
 };
 
 #endif // __COMMON_HPP__

@@ -2,10 +2,11 @@
 
 #include "Common.h"
 #include <time.h>
+#include"element.h"
 
 class Tank;
 
-class bullet {
+class bullet :public element {
 public:
 	bullet(Tank* owner);
 	~bullet();
@@ -17,12 +18,8 @@ public:
 	void check();
 
 public:
-	int bul_x;
-	int bul_y;
-	ETankDir b_dir;
 	int pace = 1;
 	clock_t begin_t;
 	clock_t end_t;
-	bool if_live=true;
 	Tank* m_owner;
 };
